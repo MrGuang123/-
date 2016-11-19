@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>echarts结合百度地图</title>
+  <style>
+    html,body {
+      margin: 0;
+      border: 0;
+      height:100%;
+      width: 100%;
+    }
+    #main {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+  <script src="./js/echarts-all.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script src="./mapEmpty.js"></script>
+  <script>
+    var mapEmpty = new MapEmpty();
+    mapEmpty.init({
+      id:'main',
+      zoom:6,
+      data:{position:[132.503,30.272]}
+    });
+
+    /*setTimeout(function(){
+      mapCircle.hide();
+    }, 3000)*/
+  </script>
+</body>
+</html>

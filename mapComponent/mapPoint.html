@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>百度地图API自定义地图</title>
+    <style>
+      html,body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <!--引用百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+    <script src="mapPoint.js"></script>
+  </head>
+
+  <body>
+    <!--百度地图容器-->
+    <div id="map"></div>
+  <script>
+  var mapPoint = new MapPoint();
+
+    // console.log(mapPoint);
+
+  mapPoint.init({
+    id:'map',
+    zoom:9,
+    data:[
+        {content:"我的备注1",title:"黑龙江",position:{lat:39.821087,lng:116.303299}},
+        {content:"我的备注2",title:"好吧",position:{lat:39.971087,lng:116.473299}},
+        {content:"我的备注3",title:"北京",position:{lat:39.929087,lng:116.409299}},
+        {content:"我的备注4",title:"添加",position:{lat:39.911087,lng:116.453299}},
+      ]
+    })
+  /*setTimeout(function(){
+    mapPoint.hide();
+  },5000)*/
+
+  //重置数据
+ /* mapPoint.resetMapData([
+        {content:"我的备注3",title:"北京",position:{lat:39.929087,lng:116.409299}},
+        {content:"我的备注4",title:"添加",position:{lat:39.911087,lng:116.453299}},
+      ])*/
+  </script>
+  </body>
+</html>

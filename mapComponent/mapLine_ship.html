@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>echarts结合百度地图</title>
+  <style>
+    html,body {
+      margin: 0;
+      border: 0;
+      height:100%;
+      width: 100%;
+    }
+    #main {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+  <script src="./js/echarts-all.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script src="./js/expendMain.js"></script>
+  <script src="./js/jquery.min.js"></script>
+  <script src="./mapLine_ship.js"></script>
+  <script>
+    var mapLineShip = new MapLineShip();
+    mapLineShip.init({
+      id:'main',
+      zoom:5,
+      //中心点
+      center:[116.4551,40.2539],
+      data:{
+        //所有点
+        vertexs:[
+          {name:'北京',position:[116.4551,40.2539]},
+          {name:'上海',position:[121.4648,31.2891]},
+          {name:'东莞',position:[113.8953,22.901]},
+          {name:'东营',position:[118.7073,37.5513]},
+          {name:'福州',position:[119.251489,26.252835]},
+          {name:'长崎',position:[129.627565,33.183575]},
+          {name:'函馆',position:[140.445175,42.116158]},
+        ],
+        //船的路线，shipLine里面开可以有多个数组，代表多条航线，
+        //每个数组里面可以有多个地名，第一个和最后一个代表起点和终点，中间的代表中转
+        //每个数组中的地名必须在vertexs中定义过
+        shipLine:[
+          ['福州','长崎','函馆']
+        ],
+      }
+    });
+
+    setTimeout(function(){
+      //resetMapData用来更新数据，传入的数据格式相当于初始化地图的data对象
+      mapLineShip.resetMapData({
+        vertexs:[
+          {name:'北京',position:[116.4551,40.2539]},
+          {name:'上海',position:[121.4648,31.2891]},
+          {name:'东莞',position:[113.8953,22.901]},
+          {name:'东营',position:[118.7073,37.5513]},
+          {name:'福州',position:[119.251489,26.252835]},
+          {name:'长崎',position:[129.627565,33.183575]},
+          {name:'函馆',position:[140.445175,42.116158]},
+        ],
+        shipLine:[
+          ['上海','北京','长崎',]
+        ],
+      })
+    }, 5000)
+  </script>
+</body>
+</html>

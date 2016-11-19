@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>加载海量点</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <style type="text/css">
+    html,body{
+        margin:0;
+        width:100%;
+        height:100%;
+        background:#ffffff;
+    }
+    #main{
+        width:100%;
+        height:100%;
+    }
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script type="text/javascript" src="./points-sample-data.js"></script>
+  <script src="./mapThermodynamic.js"></script>
+</head>
+<body>
+    <div id="main"></div>
+    <script type="text/javascript">
+
+      var mapThermodynamic = new MapThermodynamic()
+      mapThermodynamic.init({
+          id:'main',
+          zoom:5,
+          color:'#F2B002',
+          //这里的data数据是./points-sample-data.js这个文件下的全局变量data
+          data:data.data
+      })
+
+      //重新设置数据,数据格式相当于init方法的参数中的data
+      //mapThermodynamic.resetMapData(data.data);
+  </script>
+</body>
+</html>
+

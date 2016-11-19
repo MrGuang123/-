@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>echarts结合百度地图</title>
+  <style>
+    html,body {
+      margin: 0;
+      border: 0;
+      height:100%;
+      width: 100%;
+    }
+    #main {
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+  <script src="./js/echarts-all.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script src="./js/expendMain.js"></script>
+  <script src="./mapLine_airplane.js"></script>
+  <script>
+    var mapLineAir = new MapLineAir();
+    mapLineAir.init({
+      id:'main',
+      zoom:5,
+//之所以把edges和planeLine区分开是因为可能有多条路线，但是只有一个飞机的航线
+      data:{
+        vertexs:[
+          {name:'北京',content:'北京',position:[116.4551,40.2539]},
+          {name:'上海',content:'上海',position:[121.4648,31.2891]},
+          {name:'东莞',content:'东莞',position:[113.8953,22.901]},
+          {name:'东营',content:'东营',position:[118.7073,37.5513]}
+        ],
+        edges:[
+        //数组中第一个是起点，第二个是终点
+          [{name:'北京'},{name:'上海'}],
+          [{name:'上海'},{name:'北京'}],
+          [{name:'东莞'},{name:'东营'}],
+        ],
+        //这个是控制飞机的位置
+        planeLine:[{from:'北京',to:'上海'}],
+      }
+    });
+    setTimeout(function(){
+      mapLineAir.resetMapData({
+        vertexs:[
+          {name:'北京',content:'北京',position:[116.4551,40.2539]},
+          {name:'上海',content:'上海',position:[121.4648,31.2891]},
+          {name:'东莞',content:'东莞',position:[113.8953,22.901]},
+          {name:'东营',content:'东营',position:[118.7073,37.5513]}
+        ],
+        edges:[
+          [{name:'上海'},{name:'北京'}],
+        ],
+        planeLine:[{from:'上海',to:'北京'}],
+      })
+    }, 2000)
+  </script>
+</body>
+</html>

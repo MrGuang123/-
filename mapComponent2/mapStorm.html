@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>百度地图API自定义地图</title>
+    <style>
+      html,body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+      p {
+        color:#f00;
+      }
+      label.BMapLabel{
+        border:none;
+      }
+    </style>
+    <!--引用百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+    <script src="mapStorm.js"></script>
+  </head>
+
+  <body>
+    <!--百度地图容器-->
+    <div id="map"></div>
+  <script>
+  var mapStorm = new MapStorm();
+
+    // console.log(mapPoint);
+
+  mapStorm.init({
+    id:'map',
+    zoom:10,
+    stormPos:{lat:36.13661 ,lng:120.801263},
+    center:{lat:36.240076 ,lng:120.056173},
+    data:[
+        {content:"<div>nihao <img class='img' src='./img/vertex.png'/><p>天的</p></div>",
+        title:"胶州",class:'img',position:{lat:36.240076 ,lng:120.056173}},
+        {content:"<div>nihao <img class='img' src='./img/circle.png'/><p>天的</p></div>",
+        title:"即墨",class:'img',position:{lat:36.381535 ,lng:120.465512}},
+        {content:"<div>nihao <img class='img' src='./img/circle1.png'/><p>天的</p></div>",
+        title:"仰口",class:'img',position:{lat:36.347125 ,lng:120.188403}},
+        {content:"<div>nihao <img class='img' src='./img/vertex.png'/><p>天的</p></div>",
+        title:"冒岛",class:'img',position:{lat:36.316421 ,lng:119.917043}},
+      ]
+    })
+  /*setTimeout(function(){
+    mapStorm.hide();
+  },5000)*/
+
+  //重置数据
+ /* mapStorm.resetMapData([
+        {content:"我的备注3",title:"北京",position:{lat:39.929087,lng:116.409299}},
+        {content:"我的备注4",title:"添加",position:{lat:39.911087,lng:116.453299}},
+      ])*/
+  </script>
+  </body>
+</html>
