@@ -31,7 +31,6 @@
     _createMap:function(dataObj){
       var firstLat = dataObj.data[0].position.lat,
           firstLng = dataObj.data[0].position.lng;
-          console.log(firstLat,firstLng);
 
       //地图类型：，默认是普通地图，BMAP_SATELLITE_MAP是卫星图，BMAP_HYBRID_MAP是混合地图
       //混合地图默认是开启路网的，样式和卫星图一样，路网就是道路城市名称

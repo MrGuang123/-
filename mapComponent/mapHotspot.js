@@ -6,6 +6,7 @@
 
   function MapHotspot() {
     this.map;
+    this.callback;
   }
 
   MapHotspot.prototype = {
@@ -29,9 +30,6 @@
       }
     },
     _createMap: function(dataObj) {
-      /*var firstLat = dataObj.data.position[0],
-          firstLng = dataObj.data.position[1];
-          console.log(firstLat,firstLng);*/
 
       // 百度地图API功能
       this.map = new BMap.Map(dataObj.id, {
@@ -74,6 +72,8 @@
         }]
       });
       this._mapShake(dataObj.center);
+
+      this.callback = dataObj.pointCallback;
 
       this._createCover(dataObj.data.plate,dataObj.bgColor[0]);
       this._createCover(dataObj.data.medSea,dataObj.bgColor[1]);
@@ -143,9 +143,12 @@
           enableMessage: false
         };
         var infoWindow = new BMap.InfoWindow(dataArr[index].content,opts);
-        //this._addClickHandler(marker,infoWindow);
+        this._addClickHandler(marker,this.callback);
         this.map.addOverlay(marker);
       };
+    },
+    _addClickHandler:function (target,callback){
+      target.addEventListener("click",callback);
     }
   }
 

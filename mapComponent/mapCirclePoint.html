@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>echarts结合百度地图</title>
   <style>
-    html,body {
-      margin: 0;
-      border: 0;
-      height:100%;
-      width: 100%;
-    }
-    #main {
-      height: 100%;
-      width: 100%;
-    }
+  html,
+  body {
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+  }
+  
+  #main {
+    height: 100%;
+    width: 100%;
+  }
   </style>
 </head>
+
 <body>
   <div id="main"></div>
   <script src="./js/echarts-all.js"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
   <script src="./js/expendMain.js"></script>
   <script src="./mapCirclePoint.js"></script>
   <script>
-    var mapCirclePoint = new MapCirclePoint();
-    mapCirclePoint.init({
-      id:'main',
-      data:[
-        {name:'上海',position:[121.4648,31.2891]},
-        {name:'广州',position:[113.5107,23.2196]},
-        {name:'大连',position:[122.2229,39.4409]},
-        {name:'南宁',position:[108.479,23.1152]},
-        {name:'南昌',position:[116.0046,28.6633]},
-        {name:'拉萨',position:[91.1865,30.1465]},
-        {name:'长春',position:[125.8154,44.2584]},
-        {name:'包头',position:[110.3467,41.4899]}
-      ]
-    });
+  var mapCirclePoint = new MapCirclePoint();
+  mapCirclePoint.init({
+    id: 'main',
+    zoom: 7,
+    center: [116.90227, 20.521737],
+    data: [{
+      name: '东沙群岛',
+      position: [116.90227, 20.521737]
+    }, {
+      name: '海里',
+      position: [115.485679, 19.0939]
+    }, {
+      name: '黄岩岛',
+      position: [117.362203, 15.185398]
+    }, {
+      name: '中沙群岛',
+      position: [114.400238, 15.809815]
+    }, {
+      name: '西沙群岛',
+      position: [111.677438, 17.988319]
+    }, {
+      name: '海边',
+      position: [113.167619, 20.035646]
+    }]
+  });
 
-    setTimeout(function(){
-      mapCirclePoint.resetMapData([
-        {name:'上海',position:[121.4648,31.2891]},
-        {name:'广州',position:[113.5107,23.2196]},
-        {name:'包头',position:[110.3467,41.4899]}
-      ]);
-    }, 3000)
+  mapCirclePoint.addTurtle([
+    [116.90227, 20.521737],
+    [115.485679, 19.0939],
+    [117.362203, 15.185398],
+    [114.400238, 15.809815],
+    [111.677438, 17.988319],
+    [113.167619, 20.035646]
+  ])
 
-    /*setTimeout(function(){
-      mapCirclePoint.hide();
-    }, 3000)*/
+  /* setTimeout(function(){ mapCirclePoint.resetMapData([ {name:'上海',position:[121.4648,31.2891]}, {name:'广州',position:[113.5107,23.2196]}, {name:'包头',position:[110.3467,41.4899]} ]); }, 3000)
+   */
+
+  /*setTimeout(function(){
+    mapCirclePoint.hide();
+  }, 3000)*/
   </script>
 </body>
+
 </html>

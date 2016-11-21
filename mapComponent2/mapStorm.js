@@ -44,7 +44,7 @@
       this.map.enableScrollWheelZoom();
       this.map.enableKeyboard();
       this.map.enableDragging();
-      this.map.enableDoubleClickZoom()
+      this.map.enableDoubleClickZoom();
     },
     _addStorm: function(data) {
       var point = new BMap.Point(data.lng, data.lat);
