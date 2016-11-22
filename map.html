@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>百度地图统一方法</title>
+  <style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+  </style>
+  <!--引用百度地图API-->
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+  <script src="map.js"></script>
+</head>
+
+<body>
+  <!--百度地图容器-->
+  <div id="map"></div>
+  <script>
+  var map = new Map();
+  map.init({
+    id: 'map',
+    center: [39.821087, 116.303299],
+    //地图类型：，默认是普通地图，BMAP_SATELLITE_MAP是卫星图，BMAP_HYBRID_MAP是混合地图
+    //混合地图默认是开启路网的，样式和卫星图一样，路网就是道路城市名称
+    mapType: BMAP_HYBRID_MAP,
+    zoom: 11,
+  });
+
+  map.show({
+    pointData: {
+      icons: [{
+        iconSrc: './mapComponent2/img/circle.png',
+        iconSize: [82, 82],
+        iconOffset: [0, 0],
+        animate: true
+      }, {
+        iconSrc: './mapComponent2/img/vertex2.png',
+        iconSize: [22, 25],
+        iconOffset: [0, 0], //背景偏移
+        offset: [0, 0.01], //坐标偏移
+        crossLine: {
+          color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
+          weight: 1,
+          opacity: 0.6
+        }
+      }],
+      callback: function(event) {
+        console.log(event)
+      },
+      data: [{
+        content: "我的备注1",
+        title: "黑龙江",
+        position: [39.821087, 116.303299]
+      }, {
+        content: "我的备注2",
+        title: "好吧",
+        position: [39.971087, 116.473299]
+      }, {
+        content: "我的备注3",
+        title: "北京",
+        position: [39.929087, 116.409299]
+      }, {
+        content: "我的备注4",
+        title: "添加",
+        position: [39.911087, 116.453299]
+      }]
+    },
+    lineData: {
+      style: {
+        color: '#f00',
+        weight: 2,
+        style: 'dashed', //solid
+        opacity: 0.8
+      },
+      data: [
+        [39.821087, 116.303299],
+        [39.971087, 116.473299],
+        [39.929087, 116.409299],
+        [39.911087, 116.453299]
+      ]
+    }
+  })
+  </script>
+</body>
+
+</html>

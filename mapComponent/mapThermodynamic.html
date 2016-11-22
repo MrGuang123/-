@@ -1,41 +1,80 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
   <title>加载海量点</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <style type="text/css">
-    html,body{
-        margin:0;
-        width:100%;
-        height:100%;
-        background:#ffffff;
-    }
-    #main{
-        width:100%;
-        height:100%;
-    }
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+  }
+  
+  #main {
+    width: 100%;
+    height: 100%;
+  }
+  
+  button {
+    border: none;
+    background-color: #e92322;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+  }
   </style>
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
   <script type="text/javascript" src="./points-sample-data.js"></script>
   <script src="./mapThermodynamic.js"></script>
 </head>
+
 <body>
-    <div id="main"></div>
-    <script type="text/javascript">
+  <div id="main"></div>
+  <button id='btn'>点我添加船只</button>
+  <script type="text/javascript">
+  var mapThermodynamic = new MapThermodynamic()
+  mapThermodynamic.init({
+    id: 'main',
+    zoom: 5,
+    color: '#F2B002',
+    //这里的data数据是./points-sample-data.js这个文件下的全局变量data
+    data: data.data
+  })
 
-      var mapThermodynamic = new MapThermodynamic()
-      mapThermodynamic.init({
-          id:'main',
-          zoom:5,
-          color:'#F2B002',
-          //这里的data数据是./points-sample-data.js这个文件下的全局变量data
-          data:data.data
-      })
+  var btnEle = document.getElementById('btn');
+  btnEle.addEventListener('click', function() {
+    mapThermodynamic.moveToShip({
+      zoom: 10,
+      moveTo: [56.704801, 138.736552],
+      iconSrc: './img/ship.png',
+      iconSize: [68, 48],
+      iconOffset: [0, 0],
+      shipCallback: function(event) {
+        console.log(event)
+      },
+      data: [{
+        content: '1',
+        position: [56.704801, 138.736552],
+      }, {
+        content: '2',
+        position: [57.132437, 144.724873],
+      }, {
+        content: '3',
+        position: [55.569763, 138.239825],
+      }, {
+        content: '4',
+        position: [55.684264, 144.798462]
+      }]
+    })
+  })
 
-      //重新设置数据,数据格式相当于init方法的参数中的data
-      //mapThermodynamic.resetMapData(data.data);
+  //重新设置数据,数据格式相当于init方法的参数中的data
+  //mapThermodynamic.resetMapData(data.data);
   </script>
 </body>
-</html>
 
+</html>
