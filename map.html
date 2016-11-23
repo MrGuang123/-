@@ -21,7 +21,9 @@
   <!--引用百度地图API-->
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
   <script src="map.js"></script>
+  <!-- Circle,emptyType,circlePoint,linePoint,Hotspot -->
 </head>
 
 <body>
@@ -31,67 +33,265 @@
   var map = new Map();
   map.init({
     id: 'map',
-    center: [39.821087, 116.303299],
+    center: [15.604972, 40.641979],
     //地图类型：，默认是普通地图，BMAP_SATELLITE_MAP是卫星图，BMAP_HYBRID_MAP是混合地图
     //混合地图默认是开启路网的，样式和卫星图一样，路网就是道路城市名称
-    mapType: BMAP_HYBRID_MAP,
-    zoom: 11,
-  });
-
-  map.show({
-    pointData: {
-      icons: [{
-        iconSrc: './mapComponent2/img/circle.png',
-        iconSize: [82, 82],
-        iconOffset: [0, 0],
-        animate: true
-      }, {
-        iconSrc: './mapComponent2/img/vertex2.png',
-        iconSize: [22, 25],
-        iconOffset: [0, 0], //背景偏移
-        offset: [0, 0.01], //坐标偏移
-        crossLine: {
-          color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
-          weight: 1,
-          opacity: 0.6
+    //mapType: BMAP_HYBRID_MAP,
+    zoom: 3,
+    theme: {
+      styleJson: [{
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": {
+          "color": "#042F52"
         }
-      }],
-      callback: function(event) {
-        console.log(event)
-      },
-      data: [{
-        content: "我的备注1",
-        title: "黑龙江",
-        position: [39.821087, 116.303299]
       }, {
-        content: "我的备注2",
-        title: "好吧",
-        position: [39.971087, 116.473299]
+        "featureType": "land",
+        "elementType": "all",
+        "stylers": {
+          "color": "#0A78C5"
+        }
       }, {
-        content: "我的备注3",
-        title: "北京",
-        position: [39.929087, 116.409299]
+        "featureType": "boundary",
+        "elementType": "geometry",
+        "stylers": {
+          "color": "#0A78C5"
+        }
       }, {
-        content: "我的备注4",
-        title: "添加",
-        position: [39.911087, 116.453299]
+        "featureType": "label",
+        "elementType": "labels.text.fill",
+        "stylers": {
+          "color": "#ffffff",
+          "weight": "4",
+          "lightness": 2,
+          "saturation": -53
+        }
       }]
     },
-    lineData: {
-      style: {
-        color: '#f00',
-        weight: 2,
-        style: 'dashed', //solid
-        opacity: 0.8
-      },
-      data: [
-        [39.821087, 116.303299],
-        [39.971087, 116.473299],
-        [39.929087, 116.409299],
-        [39.911087, 116.453299]
-      ]
+    iconsType: [{
+      iconSrc: './mapComponent2/img/circle.png',
+      iconSize: [82, 82],
+      iconOffset: [0, 0],
+      animate: true
+    }, {
+      iconSrc: './mapComponent2/img/vertex2.png',
+      iconSize: [22, 25],
+      iconOffset: [0, 0], //背景偏移
+      offset: [0, 0.01], //坐标偏移
+      crossLine: {
+        color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
+        weight: 1,
+        opacity: 0.6
+      }
+    }],
+    lineType: {
+      color: '#ff0',
+      weight: 2,
+      style: 'dashed', //solid
+      opacity: 0.8
+    },
+    polygonType: {
+      //polygon的填充色，当数据超过颜色数量的时候会重新以第一个颜色开始向后排
+      fillColor: ['#B3DFFC', '#F9DA1F', '#FF7200'],
+      fillOpacity: 0.3
+    },
+    heatmapType: {
+      color: ['#C74D36', '#F02B1A'],
+      radius: 20, //热力点大小
+      max: 50 //热力点最大值，对应的count最大不能超过50
     }
+  });
+
+
+  map.setEvent({
+    pointClick: function(event) {
+      console.log(event)
+    },
   })
+
+  /*map.show({
+    polygonData: [
+      [
+        [167.673174, 63.230556],
+        [173.854666, 65.766347],
+        [179.447444, 67.74226],
+        [177.975661, 62.829509],
+        [174.737736, 47.779483],
+        [169.733672, 33.769461],
+        [155.604548, 24.481045],
+        [134.410862, 18.140735],
+        [149.128699, -0.807757],
+        [151.189196, -4.359866],
+        [164.140893, -14.574909],
+        [162.963466, -17.704316],
+        [144.124634, -22.704511],
+        [132.350364, -14.861422],
+        [115.866387, -15.433287],
+        [104.975187, 9.520205],
+        [120.281738, 35.952953],
+        [137.060072, 60.158079],
+      ],
+      [
+        [-5.702951, 35.472801],
+        [10.48667, 44.296032],
+        [15.785092, 45.550748],
+        [35.801351, 44.296032],
+        [42.865913, 35.952953],
+        [49.341761, 34.259724],
+        [51.696615, 11.559165],
+        [46.69255, 7.174929],
+        [29.914216, 17.294358],
+        [22.555297, 26.086814],
+        [4.599535, 33.52326],
+      ],
+      [
+        [-67.517868, -53.296053],
+        [-70.167079, -15.433287],
+        [-75.759857, 4.817345],
+        [-99.602754, 23.670224],
+        [-111.671381, 32.031245],
+        [-114.909305, 44.296032],
+        [-127.566645, 56.115499],
+        [-142.873196, 60.304473],
+        [-148.465974, 58.503944],
+        [-147.582904, 55.284353],
+        [-139.046559, 48.762034],
+        [-130.215856, 36.430179],
+        [-121.385154, 20.377128],
+        [-111.377024, -1.104077],
+        [-103.429392, -2.28898],
+        [-94.893046, -1.400368],
+        [-89.005911, -5.245781],
+        [-85.767987, -13.713132],
+        [-82.235706, -17.139127],
+        [-78.409068, -24.871422],
+        [-81.058279, -31.389879],
+        [-82.235706, -42.678271],
+        [-73.993717, -55.192062],
+      ],
+    ],
+    //热力图数据
+    heatmapData: [{
+      "lng": 6.53104,
+      "lat": 42.643258,
+      "count": 50
+    }, {
+      "lng": 12.123818,
+      "lat": 44.987485,
+      "count": 50
+    }, {
+      "lng": 51.567623,
+      "lat": 24.289664,
+      "count": 50
+    }, {
+      "lng": 8.29718,
+      "lat": 41.98785,
+      "count": 50
+    }, {
+      "lng": 11.535105,
+      "lat": 41.98785,
+      "count": 50
+    }, {
+      "lng": 15.656099,
+      "lat": 40.880245,
+      "count": 40
+    }, {
+      "lng": 19.482737,
+      "lat": 40.431878,
+      "count": 40
+    }, {
+      "lng": 28.607796,
+      "lat": 39.297706,
+      "count": 40
+    }, {
+      "lng": 33.023147,
+      "lat": 37.678264,
+      "count": 40
+    }, {
+      "lng": 36.555428,
+      "lat": 35.060002,
+      "count": 40
+    }, {
+      "lng": 39.793353,
+      "lat": 33.348066,
+      "count": 50
+    }, {
+      "lng": 43.031277,
+      "lat": 30.077504,
+      "count": 50
+    }, {
+      "lng": 43.914347,
+      "lat": 24.559192,
+      "count": 50
+    }, {
+      "lng": 45.091774,
+      "lat": 19.623071,
+      "count": 30
+    }, {
+      "lng": 45.974844,
+      "lat": 14.24175,
+      "count": 30
+    }, {
+      "lng": 42.442563,
+      "lat": 16.810186,
+      "count": 50
+    }, {
+      "lng": 37.732855,
+      "lat": 21.011515,
+      "count": 30
+    }, {
+      "lng": 35.083645,
+      "lat": 25.897969,
+      "count": 50
+    }, {
+      "lng": 28.019083,
+      "lat": 31.349175,
+      "count": 30
+    }, {
+      "lng": 24.781158,
+      "lat": 33.840766,
+      "count": 30
+    }, {
+      "lng": 20.365807,
+      "lat": 35.782872,
+      "count": 50
+    }, {
+      "lng": 16.244813,
+      "lat": 37.443927,
+      "count": 50
+    }, {
+      "lng": 10.063321,
+      "lat": 37.443927,
+      "count": 50
+    }, ]
+  })*/
+
+
+  /*map.show({
+    pointData: [{
+      content: "我的备注1",
+      title: "黑龙江",
+      position: [39.821087, 116.303299]
+    }, {
+      content: "我的备注2",
+      title: "好吧",
+      position: [39.971087, 116.473299]
+    }, {
+      content: "我的备注3",
+      title: "北京",
+      position: [39.929087, 116.409299]
+    }, {
+      content: "我的备注4",
+      title: "添加",
+      position: [39.911087, 116.453299]
+    }],
+    lineData: [
+      [39.821087, 116.303299],
+      [39.971087, 116.473299],
+      [39.929087, 116.409299],
+      [39.911087, 116.453299]
+    ]
+  })*/
   </script>
 </body>
 
