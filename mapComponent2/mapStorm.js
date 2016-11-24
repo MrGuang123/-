@@ -75,11 +75,11 @@
         console.log(content.parentNode)
         console.log(content)
 
-        var label = new BMap.Label(content,opts);
+        var label = new BMap.Label(content, opts);
         label.setZIndex(10000);
         label.setStyle({
-          border:'none',
-          background:'transparent'
+          border: 'none',
+          background: 'transparent'
         })
 
         var infoWindow = new BMap.InfoWindow(content);

@@ -61,7 +61,15 @@
             color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
             weight: 1,
             opacity: 0.6
+          },
+          //添加触摸更换图标效果
+          mouseChange: {
+            change: true, //只有为true的时候才会更换图标
+            iconSrc: './mapComponent2/img/circle.png',
+            iconSize: [82, 82],
+            iconOffset: [0, 0],
           }
+
         }],
         //生成线条的样式，包括实线和虚线
         lineType: {
@@ -80,6 +88,19 @@
           color: ['#C74D36', '#F02B1A'],//热点图对应的颜色，可以定义多个
           radius: 20, //热力点大小
           max: 50 //热力点最大值，对应的count最大不能超过50
+        },
+        //特殊点样式，可以有多个样式，但是每个样式对应一个点的数据
+        specialPointType: [{
+          iconSrc: './mapComponent2/img/circle.png',
+          iconSize: [82, 82],
+          iconOffset: [0, 0],
+          rotate: 45
+        }],
+        //海量点的样式
+        ThermodynamicType: {
+          color: '#F2B002', //点的颜色
+          size: 2, //点的大小
+          shape: BMAP_POINT_SHAPE_CIRCLE //点的形状
         }
     });
 ```
@@ -109,6 +130,17 @@ map.show({
         position: [39.911087, 116.453299]
       }]
   })
+```
+
+***特殊点数据格式***
+
+```javascript
+//每哥特殊样式对应一个特殊点，一定是写一个特殊点的样式，写一个特殊点的数据，所有特殊点使用一个click事件
+    map.show({
+      specialPointData: [
+        [167.673174, 63.230556],
+      ]
+    })
 ```
 
 ***线条的数据格式***
@@ -225,6 +257,14 @@ map.show({
   })
 ```
 
+***海量点的数据格式***
+
+```javascript
+[
+  [74.438,39.006,1],
+  [74.932,38.382,1],
+]
+```
 
 
 
@@ -246,5 +286,43 @@ map.show({
       pointClick: function(event) {
         console.log(event)
       },
+      //特殊点的点击事件
+      specialPointClick: function(event) {
+      console.log(event);
+      },
+      //点的触摸事件
+      pointMouseover: function(event) {
+        console.log(event);
+      },
+      //点的触摸离开事件
+      pointMouseout: function(event) {
+        console.log(event);
+      },
+    })
+
+    //触发方法会在地图上添加一个覆盖物沿着指定路线走，最后消失
+    map.addTurtle({
+        //添加的覆盖物的样式
+      style: {
+        iconSrc: './mapComponent2/img/circle.png',
+        iconSize: [82, 82],
+       iconOffset: [0, 0],
+        zIndex: 10
+      },
+      //开始动画的起点默认是数组的第一组坐标
+      data: [
+        [116.90227, 20.521737],
+        [115.485679, 19.0939],
+        [117.362203, 15.185398],
+        [114.400238, 15.809815],
+        [111.677438, 17.988319],
+        [113.167619, 20.035646]
+      ]
+    })
+
+    //将地图的位置移动到指定的坐标和缩放到指定级别
+    map.moveToTarget({
+      zoom: 10,  //地图缩放级别
+      moveTo: [138.736552, 56.704801] //经度和纬度
     })
 ```

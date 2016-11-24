@@ -29,11 +29,25 @@
       color: ['#C74D36', '#F02B1A'],
       radius: 20
     };
+    this.specialPointStyle = [{
+      iconSrc: './mapComponent1/img/plain.png',
+      iconSize: [59, 60],
+      iconOffset: [0, 0],
+      rotate: 0
+    }];
+    this.ThermodynamicStyle = {
+      size: 2,
+      shape: BMAP_POINT_SHAPE_CIRCLE,
+      color: '#F2B002'
+    }
 
     // 覆盖物事件
     this.pointClick = null;
     this.pointMouseover = null;
     this.pointMouseout = null;
+
+    //参数
+    this.time = 0;
   }
 
   Map.prototype = {
@@ -56,14 +70,16 @@
       if (data.heatmapData) {
         this._addHeatmap(data.heatmapData)
       }
+      if (data.specialPointData) {
+        this._addSpecialPoint(data.specialPointData)
+      }
+      if (data.ThermodynamicData) {
+        this._addThermodynamic(data.ThermodynamicData);
+      }
     },
     // 隐藏地图覆盖物
     hide: function() {
       this.map.clearOverlays();
-    },
-    // 重置大小
-    resize: function() {
-
     },
     // 重置地图数据
     resetMapData: function(data) {
@@ -73,8 +89,8 @@
     _createMap: function(dataObj) {
       var mapType = dataObj.mapType || '',
         theme = dataObj.theme || '',
-        firstLat = dataObj.center[0] || 39.821087,
-        firstLng = dataObj.center[1] || 116.303299;
+        firstLng = dataObj.center[0] || 116.303299,
+        firstLat = dataObj.center[1] || 39.821087;
       if (!mapType) {
         this.map = new BMap.Map(dataObj.id);
       } else {
@@ -86,12 +102,14 @@
         this.map.setMapStyle(theme);
       }
       if (dataObj.heatmapType && dataObj.zoom <= 4) {
-        this._mapShake(dataObj.center);
+        // this._mapShake(dataObj.center);
       }
-      this.icons = dataObj.iconsType ? dataObj.iconsType : {};
-      this.lineStyle = dataObj.lineType ? dataObj.lineType : {};
-      this.polygonStyle = dataObj.polygonType ? dataObj.polygonType : {};
-      this.heatmapStyle = dataObj.heatmapType ? dataObj.heatmapType : {};
+      this.icons = dataObj.iconsType ? dataObj.iconsType : this.icons;
+      this.lineStyle = dataObj.lineType ? dataObj.lineType : this.lineStyle;
+      this.polygonStyle = dataObj.polygonType ? dataObj.polygonType : this.polygonStyle;
+      this.heatmapStyle = dataObj.heatmapType ? dataObj.heatmapType : this.heatmapStyle;
+      this.specialPointStyle = dataObj.specialPointType ? dataObj.specialPointType : this.specialPointStyle;
+      this.ThermodynamicStyle = dataObj.ThermodynamicType ? dataObj.ThermodynamicType : this.ThermodynamicStyle;
 
       this.map.centerAndZoom(new BMap.Point(firstLng, firstLat), dataObj.zoom);
     },
@@ -104,6 +122,47 @@
     },
     setEvent: function(eventList) {
       this.pointClick = eventList.pointClick;
+      this.specialPointClick = eventList.specialPointClick;
+      this.pointMouseover = eventList.pointMouseover;
+      this.pointMouseout = eventList.pointMouseout;
+    },
+    // 加载海量点
+    _addThermodynamic: function(dataArr) {
+      var points = []; // 添加海量点数据
+      var style = this.ThermodynamicStyle;
+      for (var i = 0; i < dataArr.length; i++) {
+        points.push(new BMap.Point(dataArr[i][0], dataArr[i][1]));
+      }
+
+      var pointCollection = new BMap.PointCollection(points, style); // 初始化PointCollection
+      /*pointCollection.addEventListener('click', function (e) {
+        //alert('单击点的坐标为：' + e.point.lng + ',' + e.point.lat);  // 监听点击事件
+      });*/
+      this.map.addOverlay(pointCollection); // 添加Overlay
+    },
+    // 添加特殊点覆盖物
+    _addSpecialPoint: function(dataArr) {
+      var style = this.specialPointStyle;
+      console.log(style)
+      for (var i = 0, len = style.length; i < len; i++) {
+        var iconsrc = style[i].iconSrc,
+          iconx = style[i].iconSize[0],
+          icony = style[i].iconSize[1],
+          offsetx = style[i].iconOffset[0],
+          offsety = style[i].iconOffset[1],
+          icon = new BMap.Icon(iconsrc, new BMap.Size(iconx, icony), {
+            imageOffset: new BMap.Size(offsetx, offsety)
+          });
+        if (dataArr[i]) {
+          var point = new BMap.Point(dataArr[i][0], dataArr[i][1]);
+          var marker = new BMap.Marker(point, { icon: icon });
+          marker.setRotation(style.rotate);
+          marker.id = 'special';
+          marker.dataInfo = dataArr[i];
+          marker.addEventListener('click', this.specialPointClick);
+          this.map.addOverlay(marker);
+        }
+      }
     },
     // 添加线条覆盖物
     _addlineOverlay: function(dataArr) {
@@ -121,6 +180,7 @@
       }
       points.push(new BMap.Point(dataArr[0][1], dataArr[0][0]))
       var curve = new BMapLib.CurveLine(points, curveStyle);
+      curve.id = 'curve';
       this.map.addOverlay(curve);
     },
     // 添加点覆盖物
@@ -139,6 +199,26 @@
           icon = new BMap.Icon(iconSrc, new BMap.Size(iconx, icony), {
             imageOffset: new BMap.Size(iconOffsetX, iconOffsetY)
           });
+        if (icons[iconIndex].mouseChange && icons[iconIndex].mouseChange.change) {
+          var iconflag = true,
+            ionSrc = icons[iconIndex].mouseChange.iconSrc,
+            iconx = icons[iconIndex].mouseChange.iconSize[0],
+            icony = icons[iconIndex].mouseChange.iconSize[1],
+            offsetx = icons[iconIndex].mouseChange.iconOffset[0],
+            offsety = icons[iconIndex].mouseChange.iconOffset[1],
+            exicon = new BMap.Icon(ionSrc, new BMap.Size(iconx, icony), {
+              imageOffset: new BMap.Size(offsetx, offsety),
+              //anchor:new BMap.Size(15,15)
+            });
+        }
+
+        if (icons[iconIndex].label && icons[iconIndex].label.show) {
+          var opts = {
+            width: icons[iconIndex].label.width,
+            enableMessage: false
+          };
+          var labelFlag = true;
+        }
 
         if (icons[iconIndex].animate) {
           (function(iconSrc) {
@@ -152,6 +232,7 @@
           this._addCrossLine(icons[iconIndex].crossLine, dataArr);
         }
 
+
         for (var index = 0; index < dataArr.length; index++) {
           var point = new BMap.Point(dataArr[index].position[1] + offsetX, dataArr[index].position[0] + offsetY);
           var marker = new BMap.Marker(point, {
@@ -159,8 +240,43 @@
           });
 
           marker.dataInfo = dataArr[index];
+          marker.id = 'point';
           marker.setZIndex(iconIndex);
           marker.addEventListener('click', this.pointClick);
+
+          if (labelFlag) {
+            var content = dataArr[index].label || '';
+            var label = new BMap.Label(content, opts);
+            label.setZIndex(10);
+            label.setStyle({
+              border: 'none',
+              background: 'transparent'
+            })
+            console.log(label);
+            label.addEventListener('mouseover', function() {
+              this.setZIndex(10000);
+              // this['V'].style.zIndex = 1000;
+            });
+            label.addEventListener('mouseout', function() {
+              this.setZIndex(10);
+              // this['V'].style.zIndex = 10;
+            })
+
+            marker.setLabel(label);
+          }
+
+          marker.addEventListener('mouseover', function(event) {
+            if (iconflag) {
+              this.setIcon(exicon)
+            }
+            _this.pointMouseover(event);
+          })
+          marker.addEventListener('mouseout', function(event) {
+            if (iconflag) {
+              this.setIcon(icon)
+            }
+            _this.pointMouseout(event);
+          })
           this.map.addOverlay(marker);
         }
       }
@@ -190,6 +306,8 @@
         ];
         var horizontalLine = new BMap.Polyline(horPoints, horStyle);
         var verticalLine = new BMap.Polyline(verPoints, verStyle);
+        horizontalLine.id = 'cross';
+        verticalLine.id = 'cross';
         this.map.addOverlay(horizontalLine);
         this.map.addOverlay(verticalLine);
       }
@@ -206,6 +324,7 @@
           fillOpacity: this.polygonStyle.fillOpacity,
           strokeOpacity: 0.1
         }); //创建多边形
+        polygon.id = 'polygon';
         this.map.addOverlay(polygon);
       }
     },
@@ -224,9 +343,55 @@
         "radius": radius,
         gradient: colors
       });
+      heatmapOverlay.id = 'heatmapOverlay';
       this.map.addOverlay(heatmapOverlay);
       heatmapOverlay.setDataSet({ data: dataArr, max: max });
       heatmapOverlay.show();
+    },
+    // 添加一个覆盖物沿着给定路线走的方法
+    addTurtle: function(data) {
+      var points = [],
+        style = data.style,
+        dataArr = data.data;
+      var startPoint = new BMap.Point(dataArr[0][0], dataArr[0][1]);
+      var turtleMarker = new BMap.Marker(startPoint, {
+        icon: new BMap.Icon(style.iconSrc, new BMap.Size(style.iconSize[0] || 20, style.iconSize[1] || 25), {
+          imageOffset: new BMap.Size(style.iconOffset[0] || 0, style.iconOffset[1] || 0)
+        })
+      });
+      this.map.addOverlay(turtleMarker);
+      turtleMarker.setZIndex(style.zIndex || 10);
+      turtleMarker.id = 'turtle';
+      for (var i = 0, len = dataArr.length - 1; i < len; i++) {
+        points = points.concat(getStep(dataArr[i], dataArr[i + 1]));
+      }
+      this._turtleAnimate(turtleMarker, points);
+    },
+    // 移动到指定坐标并且将地图缩放到指定级别
+    moveToTarget: function(data) {
+      var centerPoint = new BMap.Point(data.moveTo[0], data.moveTo[1]);
+      this.map.setZoom(data.zoom);
+      this.map.panTo(centerPoint);
+    },
+    // 运动方法
+    _turtleAnimate: function(marker, points) {
+      var _this = this;
+      _this.time++;
+      setTimeout(function() {
+
+        marker.setPosition(points[_this.time]);
+        if (_this.time >= 50) {
+          _this.time = 0;
+          var overlays = _this.map.getOverlays();
+          for (var x = 0, leng = overlays.length; x < leng; x++) {
+            if (overlays[x].id == 'turtle') {
+              _this.map.removeOverlay(overlays[x]);
+            }
+          }
+          return;
+        }
+        _this._turtleAnimate(marker, points);
+      }, 100)
     },
     // 点闪动方法
     _circleAnimate: function(iconSrc) {
@@ -261,6 +426,20 @@
         _this.map.panTo(new BMap.Point(data[0] - 45, data[1]));
       }, 100)
     },
+    _addMouseHandler: function(target) {
+      target.addEventListener('mouseover', function() {
+        target.setIcon(new BMap.Icon("./img/circle1.png", new BMap.Size(50, 50), {
+          imageOffset: new BMap.Size(0, 0),
+          //anchor:new BMap.Size(25,25)
+        }))
+      })
+      target.addEventListener('mouseout', function() {
+        target.setIcon(new BMap.Icon("./img/circle2.png", new BMap.Size(30, 30), {
+          imageOffset: new BMap.Size(0, 0),
+          //anchor:new BMap.Size(15,15)
+        }))
+      })
+    }
   }
 
   // 为了让颜色数组的数量和数据数量保持一致的函数，颜色缺少重新循环
@@ -278,6 +457,19 @@
     var points = [];
     for (var i = 0, len = dataArr.length; i < len; i++) {
       points.push(new BMap.Point(dataArr[i][0], dataArr[i][1]));
+    }
+    return points;
+  }
+
+  //将每个坐标点之间分成十步走
+  function getStep(begin, end) {
+    var count = 10;
+    var points = [];
+    var horDistance = (end[0] - begin[0]) / 10;
+    var verDistance = (end[1] - begin[1]) / 10;
+    // console.log(horDistance, begin[0])
+    while (count--) {
+      points.push(new BMap.Point(begin[0] + horDistance * (10 - count), begin[1] + verDistance * (10 - count)))
     }
     return points;
   }

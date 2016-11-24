@@ -22,8 +22,9 @@
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=GAksItkSpA2HzIVHA0xAbLGVhdHXbKf9"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/library/CurveLine/1.5/src/CurveLine.min.js"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+  <script type="text/javascript" src="./mapComponent/points-sample-data.js"></script>
   <script src="map.js"></script>
-  <!-- Circle,emptyType,circlePoint,linePoint,Hotspot -->
+  <!-- Circle,emptyType,circlePoint,linePoint,Hotspot,mapComponent1 -->
 </head>
 
 <body>
@@ -33,11 +34,11 @@
   var map = new Map();
   map.init({
     id: 'map',
-    center: [15.604972, 40.641979],
+    center: [116.303299, 39.821087],
     //地图类型：，默认是普通地图，BMAP_SATELLITE_MAP是卫星图，BMAP_HYBRID_MAP是混合地图
     //混合地图默认是开启路网的，样式和卫星图一样，路网就是道路城市名称
     //mapType: BMAP_HYBRID_MAP,
-    zoom: 3,
+    zoom: 10,
     theme: {
       styleJson: [{
         "featureType": "water",
@@ -68,21 +69,46 @@
         }
       }]
     },
-    iconsType: [{
+    iconsType: [
+      /*{
+            iconSrc: './mapComponent2/img/circle.png',
+            iconSize: [82, 82],
+            iconOffset: [0, 0],
+            animate: true,
+            mouseChange: {
+              change: true,
+              iconSrc: './mapComponent2/img/circle.png',
+              iconSize: [82, 82],
+              iconOffset: [0, 0],
+            }
+          },*/
+      {
+        iconSrc: './mapComponent2/img/vertex2.png',
+        iconSize: [22, 25],
+        iconOffset: [0, 0], //背景偏移
+        offset: [0, 0.01], //坐标偏移
+        /*crossLine: {
+          color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
+          weight: 1,
+          opacity: 0.6
+        },
+        mouseChange: {
+          change: true,
+          iconSrc: './mapComponent2/img/circle.png',
+          iconSize: [82, 82],
+          iconOffset: [0, 0],
+        },*/
+        label: {
+          show: true,
+          width: 200
+        }
+      }
+    ],
+    specialPointType: [{
       iconSrc: './mapComponent2/img/circle.png',
       iconSize: [82, 82],
       iconOffset: [0, 0],
-      animate: true
-    }, {
-      iconSrc: './mapComponent2/img/vertex2.png',
-      iconSize: [22, 25],
-      iconOffset: [0, 0], //背景偏移
-      offset: [0, 0.01], //坐标偏移
-      crossLine: {
-        color: ['#00D2FF', '#045E95'], //颜色第一个是水平的线条颜色，第二个是竖直的线条的颜色
-        weight: 1,
-        opacity: 0.6
-      }
+      rotate: 45
     }],
     lineType: {
       color: '#ff0',
@@ -99,15 +125,62 @@
       color: ['#C74D36', '#F02B1A'],
       radius: 20, //热力点大小
       max: 50 //热力点最大值，对应的count最大不能超过50
+    },
+    ThermodynamicType: {
+      color: '#F2B002', //点的颜色
+      size: 2, //点的大小
+      shape: BMAP_POINT_SHAPE_CIRCLE //点的形状
     }
   });
+
+  map.addTurtle({
+    style: {
+      iconSrc: './mapComponent2/img/circle.png',
+      iconSize: [82, 82],
+      iconOffset: [0, 0],
+      zIndex: 10
+    },
+    data: [
+      [116.90227, 20.521737],
+      [115.485679, 19.0939],
+      [117.362203, 15.185398],
+      [114.400238, 15.809815],
+      [111.677438, 17.988319],
+      [113.167619, 20.035646]
+    ]
+  })
+
+
+  /*map.moveToTarget({
+    zoom: 10,
+    moveTo: [138.736552, 56.704801]
+  })*/
 
 
   map.setEvent({
     pointClick: function(event) {
       console.log(event)
     },
+    specialPointClick: function(event) {
+      console.log(event);
+    },
+    pointMouseover: function(event) {
+      console.log(event);
+    },
+    pointMouseout: function(event) {
+      console.log(event);
+    },
   })
+
+  map.show({
+    ThermodynamicData: data.data
+  })
+
+  /*map.show({
+    specialPointData: [
+      [167.673174, 63.230556],
+    ]
+  })*/
 
   /*map.show({
     polygonData: [
@@ -267,21 +340,25 @@
   })*/
 
 
-  /*map.show({
+  map.show({
     pointData: [{
       content: "我的备注1",
+      label: '<div><p>哈哈哈哈哈哈哈哈哈</p></div>',
       title: "黑龙江",
       position: [39.821087, 116.303299]
     }, {
       content: "我的备注2",
+      label: '<div><p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p></div>',
       title: "好吧",
       position: [39.971087, 116.473299]
     }, {
       content: "我的备注3",
+      label: '<div><p>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</p></div>',
       title: "北京",
       position: [39.929087, 116.409299]
     }, {
       content: "我的备注4",
+      label: '<div><p>哈哈哈哈哈哈哈哈哈哈哈哈</p></div>',
       title: "添加",
       position: [39.911087, 116.453299]
     }],
@@ -291,7 +368,7 @@
       [39.929087, 116.409299],
       [39.911087, 116.453299]
     ]
-  })*/
+  })
   </script>
 </body>
 
