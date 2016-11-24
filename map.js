@@ -249,17 +249,15 @@
             var label = new BMap.Label(content, opts);
             label.setZIndex(10);
             label.setStyle({
-              border: 'none',
-              background: 'transparent'
+              // border: 'none',
+              // background: 'transparent'
             })
             console.log(label);
             label.addEventListener('mouseover', function() {
-              this.setZIndex(10000);
-              // this['V'].style.zIndex = 1000;
+              this['V'].parentNode.style.zIndex = 1;
             });
             label.addEventListener('mouseout', function() {
-              this.setZIndex(10);
-              // this['V'].style.zIndex = 10;
+              this['V'].parentNode.style.zIndex = 0;
             })
 
             marker.setLabel(label);
@@ -425,20 +423,6 @@
         // _this.map.panTo(new BMap.Point(data[0]-60,data[1]));
         _this.map.panTo(new BMap.Point(data[0] - 45, data[1]));
       }, 100)
-    },
-    _addMouseHandler: function(target) {
-      target.addEventListener('mouseover', function() {
-        target.setIcon(new BMap.Icon("./img/circle1.png", new BMap.Size(50, 50), {
-          imageOffset: new BMap.Size(0, 0),
-          //anchor:new BMap.Size(25,25)
-        }))
-      })
-      target.addEventListener('mouseout', function() {
-        target.setIcon(new BMap.Icon("./img/circle2.png", new BMap.Size(30, 30), {
-          imageOffset: new BMap.Size(0, 0),
-          //anchor:new BMap.Size(15,15)
-        }))
-      })
     }
   }
 
